@@ -1,5 +1,5 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from entries import get_single_entry, get_all_entries
+from entries import get_single_entry, get_all_entries, delete_entry
 
 import json
 
@@ -64,6 +64,14 @@ class HandleRequests(BaseHTTPRequestHandler):
         # This weird code sends a response back to the client
         self.wfile.write(f"{response}".encode())
 
+    def do_DELETE(self):
+        self._set_headers(204)
+        resource, id = self.parse_url(self.path)
+
+        if resource == "entries":
+            delete_entry(id)
+
+        self.wfile.write("".encode())
 
 # This function is not inside the class. It is the starting
 # point of this application.
