@@ -1,5 +1,5 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from entries import get_single_entry, get_all_entries, delete_entry
+from entries import get_single_entry, get_all_entries, delete_entry, get_entries_by_search
 
 import json
 
@@ -13,16 +13,24 @@ class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
         path_params = path.split("/")
         resource = path_params[1]
-        id = None
 
-        try:
-            id = int(path_params[2])
-        except IndexError:
-            pass
-        except ValueError:
-            pass
+        if "?" in resource:
+            resource, param = resource.split("?")
+            key, value = param.split("=")
 
-        return (resource, id)
+            return (resource, key, value)
+            
+        else:
+            id = None
+
+            try:
+                id = int(path_params[2])
+            except IndexError:
+                pass
+            except ValueError:
+                pass
+
+            return (resource, id)
 
     # Here's a class function
 
@@ -45,20 +53,26 @@ class HandleRequests(BaseHTTPRequestHandler):
     # Here's a method on the class that overrides the parent's method.
     # It handles any GET request.
     def do_GET(self):
-        # Set the response code to 'Ok'
+        response = {}
         self._set_headers(200)
+        parsed = self.parse_url(self.path)
 
-        # Your new console.log() that outputs to the terminal
-        print(self.path)
+        if len(parsed) == 2:
+            resource, id = parsed
 
-        resource, id = self.parse_url(self.path)
+            if resource == "entries":
+                if id is not None:
+                    response = f"{get_single_entry(id)}"
 
-        if resource == "entries":
-            if id is not None:
-                response = f"{get_single_entry(id)}"
+                else:
+                    response = f"{get_all_entries()}"
 
-            else:
-                response = f"{get_all_entries()}"
+        elif len(parsed) == 3:
+            resource, key, value = parsed
+            
+            if key == "entry" and resource == "entries":
+                response = f"{get_entries_by_search(value)}"
+
 
         
         # This weird code sends a response back to the client
