@@ -53,8 +53,10 @@ def get_single_entry(id):
             e.concept,
             e.entry,
             e.mood_id,
-            e.instructor_id
+            e.instructor_id,
+            m.label mood_label
         FROM Entry e
+        JOIN Mood m
         WHERE e.id = ?
         """, (id, ))
 
@@ -66,6 +68,9 @@ def get_single_entry(id):
                       data['entry'],
                       data['mood_id'],
                       data['instructor_id'])
+
+        mood = Mood(data['mood_id'], data['mood_label'])
+        entry.mood = mood.__dict__
     
     return json.dumps(entry.__dict__)
 
