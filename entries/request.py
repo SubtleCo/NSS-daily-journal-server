@@ -1,6 +1,6 @@
 import sqlite3
 import json
-from models import Entry
+from models import Entry, Mood
 
 
 def get_all_entries():
@@ -15,8 +15,11 @@ def get_all_entries():
             e.concept,
             e.entry,
             e.mood_id,
-            e.instructor_id
-        FROM Entries e
+            e.instructor_id,
+            m.label mood_label
+        FROM Entry e
+        JOIN Mood m
+            ON m.id = e.mood_id
         """)
 
         dataset = db_cursor.fetchall()
@@ -30,6 +33,9 @@ def get_all_entries():
                           row['entry'],
                           row['mood_id'],
                           row['instructor_id'])
+
+            mood = Mood(row['mood_id'], row['mood_label'])
+            entry.mood = mood.__dict__
             entries.append(entry.__dict__)
 
     return json.dumps(entries)
@@ -47,8 +53,10 @@ def get_single_entry(id):
             e.concept,
             e.entry,
             e.mood_id,
-            e.instructor_id
-        FROM Entries e
+            e.instructor_id,
+            m.label mood_label
+        FROM Entry e
+        JOIN Mood m
         WHERE e.id = ?
         """, (id, ))
 
@@ -60,6 +68,9 @@ def get_single_entry(id):
                       data['entry'],
                       data['mood_id'],
                       data['instructor_id'])
+
+        mood = Mood(data['mood_id'], data['mood_label'])
+        entry.mood = mood.__dict__
     
     return json.dumps(entry.__dict__)
 
@@ -76,7 +87,7 @@ def get_entries_by_search(search_term):
             e.entry,
             e.mood_id,
             e.instructor_id
-        FROM Entries e
+        FROM Entry e
         WHERE e.entry LIKE ?
         """, (f"%{search_term}%", ))
 
@@ -101,6 +112,6 @@ def delete_entry(id):
         db_cursor = conn.cursor()
 
         db_cursor.execute("""
-        DELETE FROM Entries
+        DELETE FROM Entry
         WHERE id = ?
         """, (id, ))

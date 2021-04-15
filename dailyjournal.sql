@@ -1,43 +1,104 @@
-CREATE TABLE 'Entries' (
-    'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    'date' TEXT NOT NULL,
-    'concept' TEXT NOT NULL,
-    'entry' TEXT NOT NULL,
-    'mood_id' INTEGER NOT NULL,
-    'instructor_id' INTEGER NOT NULL,
-    FOREIGN KEY('mood_id') REFERENCES 'Moods'('id'),
-    FOREIGN KEY('instructor_id') REFERENCES 'Instructors'('id')
-);
-CREATE TABLE 'Moods' (
-    'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    'label' TEXT NOT NULL UNIQUE
-);
-CREATE TABLE 'Tags' (
-    'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    'subject' TEXT NOT NULL
-);
-CREATE TABLE 'Instructors' (
-    'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    'first_name' TEXT NOT NULL,
-    'last_name' TEXT NOT NULL
-);
-CREATE TABLE 'entry_tags' (
-    'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    'entry_id' INTEGER NOT NULL,
-    'tag_id' INTEGER NOT NULL,
-    FOREIGN KEY('entry_id') REFERENCES 'Entries'('id'),
-    FOREIGN KEY('tag_id') REFERENCES 'Tags'('id')
-);
+-- CREATE TABLE 'Entry' (
+--     'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+--     'date' TEXT NOT NULL,
+--     'concept' TEXT NOT NULL,
+--     'entry' TEXT NOT NULL,
+--     'mood_id' INTEGER NOT NULL,
+--     'instructor_id' INTEGER NOT NULL,
+--     FOREIGN KEY('mood_id') REFERENCES 'Moods'('id'),
+--     FOREIGN KEY('instructor_id') REFERENCES 'Instructors'('id')
+-- );
+-- CREATE TABLE 'Mood' (
+--     'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+--     'label' TEXT NOT NULL UNIQUE
+-- );
+-- CREATE TABLE 'Tag' (
+--     'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+--     'subject' TEXT NOT NULL
+-- );
+-- CREATE TABLE 'Instructor' (
+--     'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+--     'first_name' TEXT NOT NULL,
+--     'last_name' TEXT NOT NULL
+-- );
+-- CREATE TABLE 'entry_tag' (
+--     'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+--     'entry_id' INTEGER NOT NULL,
+--     'tag_id' INTEGER NOT NULL,
+--     FOREIGN KEY('entry_id') REFERENCES 'Entries'('id'),
+--     FOREIGN KEY('tag_id') REFERENCES 'Tags'('id')
+-- );
 
-INSERT INTO 'entry_tags'
-VALUES (null,2,2),
-    (null,3,1),
-    (null,2,4),
-    (null,4,3),
-    (null,4,1),
-    (null,6,5),
-    (null,7,5),
-    (null,1,5),
-    (null,4,5);
+-- INSERT INTO 'Entry'
+-- VALUES (
+--         null,
+--         '2021-02-12',
+--         'Here is another one',
+--         "Testing out entry divider. Testing Edit",
+--         2,
+--         1
+--     ),
+--     (
+--         null,
+--         "2021-02-22",
+--         "OK then hi",
+--         "This is a very snowy day.",
+--         1,
+--         3
+--     ),
+--     (
+--         null,
+--         "2021-02-14",
+--         "Here's another one",
+--         "Testing out another thing",
+--         2,
+--         1
+--     ),
+--     (
+--         null,
+--         "2021-02-15",
+--         "Adding tags to entries",
+--         "I can't believe this actually works!",
+--         2,
+--         1
+--     )
 
-SELECT * FROM 'entry_tags'
+-- INSERT INTO 'Mood'
+-- VALUES (null, "Mind Blown"),
+--     (null, "Excited"),
+--     (null, "Happy as a clam"),
+--     (null, "OK with things"),
+--     (null, "Sad about it"),
+--     (null, "Confused..."),
+--     (null, "Frustrated"),
+--     (null, "Mad!"),
+--     (null, "Tired"),
+--     (null, "Nervous")
+
+-- INSERT INTO 'Instructor'
+-- VALUES (null, "Jisie", "David"),
+--     (null, "Sage", "Klein"),
+--     (null, "Scortt", "Silver"),
+--     (null, "Bryan", "Nilsen")
+
+
+-- INSERT INTO 'Tag'
+-- VALUES (null, "api"),
+--     (null, "componens"),
+--     (null, "fetch"),
+--     (null, "async"),
+--     (null, "promises"),
+--     (null, "json"),
+--     (null, "json-server")
+
+
+-- INSERT INTO 'entry_tag'
+-- VALUES (null, 2, 2),
+--     (null, 3, 1),
+--     (null, 2, 4),
+--     (null, 4, 3),
+--     (null, 4, 1),
+--     (null, 6, 5),
+--     (null, 7, 5),
+--     (null, 1, 5),
+--     (null, 4, 5);
