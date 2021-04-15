@@ -142,7 +142,7 @@ def create_entry(new_entry):
             db_cursor.execute("""
             INSERT INTO entry_tag (entry_id, tag_id)
             VALUES (?,?)
-            """, (id, tag['id']))
+            """, (id, tag))
 
     return json.dumps(new_entry)
 
