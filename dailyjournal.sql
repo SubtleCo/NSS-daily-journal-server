@@ -102,3 +102,5 @@
 --     (null, 7, 5),
 --     (null, 1, 5),
 --     (null, 4, 5);
+
+SELECT * FROM entry_tag WHERE id = 8

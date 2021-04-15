@@ -17,6 +17,7 @@ def get_all_entries():
             e.mood_id,
             e.instructor_id,
             m.label mood_label
+
         FROM Entry e
         JOIN Mood m
             ON m.id = e.mood_id
@@ -35,6 +36,25 @@ def get_all_entries():
                           row['instructor_id'])
 
             mood = Mood(row['mood_id'], row['mood_label'])
+
+            db_cursor.execute("""
+                SELECT * FROM entry_tag
+                WHERE entry_id = ?
+            """, (row['id'],))
+
+            tag_entries = db_cursor.fetchall()
+
+            entry.tags = []
+            
+            for tag_entry in tag_entries:
+                db_cursor.execute("""
+                    SELECT subject
+                    FROM tag
+                    WHERE id = ?
+                """, (tag_entry['tag_id'],))
+                tag = db_cursor.fetchone()
+                entry.tags.append(tag['subject'])
+
             entry.mood = mood.__dict__
             entries.append(entry.__dict__)
 
@@ -117,6 +137,12 @@ def create_entry(new_entry):
 
         id = db_cursor.lastrowid
         new_entry['id'] = id
+
+        for tag in new_entry["tags"]:
+            db_cursor.execute("""
+            INSERT INTO entry_tag (entry_id, tag_id)
+            VALUES (?,?)
+            """, (id, tag['id']))
 
     return json.dumps(new_entry)
 
